@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Egérmozgás mintázat</title>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      #container {
+        padding: 20px;
+        width: 800px;
+        height: 600px;
+        position: absolute;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: azure;
+        display: none;
+      }
+      #button {
+        position: relative;
+        padding: 10px;
+        cursor: pointer;
+        width: 80px;
+        height: 40px;
+        font-size: 15px;
+      }
+      #title {
+        font-size: 24px;
+        max-width: 600px;
+        position: relative;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        margin: 50px 0;
+      }
+      #start {
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-size: 40px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="title">
+      A képernyőn 20 gomb fog megjelenni változó pozíciókban. Egyetlen dolgod
+      van, hogy ezekre a felbukkanó gombokra rákattints. <br /><br />A feladatot
+      nem lehet jól vagy rosszul csinálni, a háttérben a program az egérmozgásod
+      egyedi mintázatát figyeli. A feladat kb. 30 másodpercet vesz igénybe.
+    </div>
+    <button id="start">Indulhat!</button>
+    <div id="container">
+      <button id="button" />
+    </div>
+    <script src="src/index.ts"></script>
+  </body>
+</html>

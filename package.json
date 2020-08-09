@@ -1,0 +1,23 @@
+{
+  "name": "mouse-makaron",
+  "version": "1.0.0",
+  "description": "Mouse Makaron",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html",
+    "deploy": "npm run build && firebase deploy"
+  },
+  "dependencies": {
+    "@types/jquery": "3.5.1",
+    "jquery": "3.5.1",
+    "ml-knn": "3.0.0"
+  },
+  "devDependencies": {
+    "firebase": "^7.17.2",
+    "firebase-tools": "^8.7.0",
+    "parcel-bundler": "^1.6.1",
+    "typescript": "^3.9.7"
+  },
+  "keywords": []
+}
