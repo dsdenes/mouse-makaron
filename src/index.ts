@@ -27,7 +27,7 @@ if (localStorage.getItem('t') === null) {
   $start.style.display = 'none'
 }
 
-const gender = localStorage.getItem('t') as Gender
+const gender = localStorage.getItem('t') === '0' ? Gender.MALE : Gender.FEMALE
 
 for (let i = 0; i < neededClicks + 1; i++) {
   positions.push([
