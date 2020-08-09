@@ -1,6 +1,7 @@
 import { handleMouseMove } from './track/handle-mouse-move'
 import { Gender } from './track/types/gender.type'
-import { saveFeaturesToDb } from './track/track'
+import { persistToDb } from './track/track'
+import { positions } from './track/positions'
 const search = new URLSearchParams(window.location.search)
 
 const $start = document.querySelector<HTMLElement>('#start') as HTMLElement
@@ -10,12 +11,7 @@ const $container = document.querySelector<HTMLElement>(
   '#container'
 ) as HTMLElement
 
-const positions: Array<Array<number>> = []
-const neededClicks = 10
-
-const buttonWidth = 80
-const buttonHeight = 40
-const padding = 20
+const neededClicks = 20
 
 if (search.has('t')) {
   localStorage.setItem('t', search.get('t') as string)
@@ -29,12 +25,16 @@ if (localStorage.getItem('t') === null) {
 
 const gender = localStorage.getItem('t') === '0' ? Gender.MALE : Gender.FEMALE
 
-for (let i = 0; i < neededClicks + 1; i++) {
-  positions.push([
-    Math.round(Math.random() * (800 - buttonWidth - padding)),
-    Math.round(Math.random() * (600 - buttonHeight - padding))
-  ])
-}
+// const positions: Array<Array<number>> = []
+// const buttonWidth = 80
+// const buttonHeight = 40
+// const padding = 20
+// for (let i = 0; i < neededClicks + 1; i++) {
+//   positions.push([
+//     Math.round(Math.random() * (800 - buttonWidth - padding)),
+//     Math.round(Math.random() * (600 - buttonHeight - padding))
+//   ])
+// }
 
 const mouseEventHandler = handleMouseMove(gender)
 
@@ -64,6 +64,6 @@ $start.addEventListener('click', () => {
   $button.addEventListener('click', showButton)
   showButton()
 
-  saveFeaturesToDb()
+  persistToDb()
   document.addEventListener('mousemove', mouseEventHandler)
 })

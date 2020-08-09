@@ -7,7 +7,7 @@ import { curveFeaturesEvents } from './handle-mouse-move'
 
 const dbCurves = dba('curves')
 
-export function saveFeaturesToDb() {
+export function persistToDb() {
   curveFeaturesEvents.removeAllListeners('features')
   curveFeaturesEvents.addListener('features', handleFeatures)
 }
