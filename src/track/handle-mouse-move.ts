@@ -21,7 +21,7 @@ export const handleMouseMove = (gender: Gender) => (event: MouseEvent) => {
   if (performance.now() - currentCurveLastEvent > 200) {
     currentCurve.push([...currentCurvePoints])
     currentCurvePoints.length = 0
-    setTimeout(processCurves, 0)
+    setTimeout(() => processCurves(gender), 0)
   }
 
   currentCurveLastEvent = performance.now()
@@ -35,7 +35,7 @@ export const handleMouseMove = (gender: Gender) => (event: MouseEvent) => {
 }
 
 let processingCurves: boolean = false
-function processCurves() {
+function processCurves(gender: Gender) {
   if (processingCurves) {
     return
   }
@@ -48,13 +48,13 @@ function processCurves() {
       continue
     }
 
-    setTimeout(() => processCurve(curve), 0)
+    setTimeout(() => processCurve(gender, curve), 0)
   }
 
   processingCurves = false
 }
 
-function processCurve(curve: TrackEvent[]) {
+function processCurve(gender: Gender, curve: TrackEvent[]) {
   const firstEvent = curve[0]
   const lastEvent = curve[curve.length - 1]
   const sumTime = lastEvent.ts - firstEvent.ts
@@ -102,6 +102,7 @@ function processCurve(curve: TrackEvent[]) {
     Math.sqrt(Math.pow(movementX, 2) + Math.pow(movementY, 2)) / sumTime
 
   const features: CurveFeatures = {
+    gender,
     size: curve.length,
     sumDistance,
     sumTime,
