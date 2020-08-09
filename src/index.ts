@@ -36,10 +36,12 @@ for (let i = 0; i < neededClicks + 1; i++) {
   ])
 }
 
+const mouseEventHandler = handleMouseMove(gender)
+
 let clicks = 0
 function showButton() {
   if (clicks === neededClicks) {
-    document.removeEventListener('mousemove', handleMouseMove(gender))
+    document.removeEventListener('mousemove', mouseEventHandler)
     $button.style.display = 'none'
     $container.style.display = 'none'
     $title.style.display = 'inline-block'
@@ -63,5 +65,5 @@ $start.addEventListener('click', () => {
   showButton()
 
   saveFeaturesToDb()
-  document.addEventListener('mousemove', handleMouseMove(gender))
+  document.addEventListener('mousemove', mouseEventHandler)
 })
