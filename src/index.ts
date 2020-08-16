@@ -1,4 +1,4 @@
-import { handleMouseMove } from './track/handle-mouse-move'
+import { handleMouseMove, handleClick } from './track/handle-mouse-events'
 import { Gender } from './track/types/gender.type'
 import { persistToDb } from './track/track'
 import { positions } from './track/positions'
@@ -25,23 +25,13 @@ if (localStorage.getItem('t') === null) {
 
 const gender = localStorage.getItem('t') === '0' ? Gender.MALE : Gender.FEMALE
 
-// const positions: Array<Array<number>> = []
-// const buttonWidth = 80
-// const buttonHeight = 40
-// const padding = 20
-// for (let i = 0; i < neededClicks + 1; i++) {
-//   positions.push([
-//     Math.round(Math.random() * (800 - buttonWidth - padding)),
-//     Math.round(Math.random() * (600 - buttonHeight - padding))
-//   ])
-// }
-
-const mouseEventHandler = handleMouseMove(gender)
+const mouseMoveHandler = handleMouseMove(gender)
+const mouseClickHandler = handleClick(gender)
 
 let clicks = 0
 function showButton() {
   if (clicks === neededClicks) {
-    document.removeEventListener('mousemove', mouseEventHandler)
+    document.removeEventListener('mousemove', mouseMoveHandler)
     $button.style.display = 'none'
     $container.style.display = 'none'
     $title.style.display = 'inline-block'
@@ -65,5 +55,8 @@ $start.addEventListener('click', () => {
   showButton()
 
   persistToDb()
-  document.addEventListener('mousemove', mouseEventHandler)
+  document.addEventListener('mousemove', mouseMoveHandler)
+  document.addEventListener('mousedown', mouseClickHandler)
+  document.addEventListener('mouseup', mouseClickHandler)
+  document.addEventListener('click', mouseClickHandler)
 })

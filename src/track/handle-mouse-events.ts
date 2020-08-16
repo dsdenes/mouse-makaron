@@ -1,18 +1,68 @@
 import { Gender } from './types/gender.type'
 import { TrackEvent } from './types/track-event.type'
 import { CurveFeatures } from './types/curve-features.type'
-const EventEmitter = require('events')
+import { EventEmitter } from './event-emitter'
 
-export const curveFeaturesEvents = new EventEmitter() as NodeJS.EventEmitter
+export const curveFeaturesEvents = new EventEmitter()
+export const clickFeaturesEvents = new EventEmitter()
 
 let currentCurveLastEvent: number | undefined
 const currentCurvePoints: TrackEvent[] = []
 const currentCurve: TrackEvent[][] = []
+let clickStartedAt: number | undefined
+let clickDuration: number | undefined
+let lastMoveEventAt: number | undefined
+
+export const handleClick = (gender: Gender) => {
+  let startEvent: MouseEvent | undefined
+  let movedDuringClick: number | undefined
+  return (event: MouseEvent) => {
+    if (!gender) {
+      return
+    }
+
+    if (event.type === 'mousedown' && clickDuration === undefined) {
+      clickStartedAt = performance.now()
+      startEvent = event
+    }
+
+    if (
+      event.type === 'mouseup' &&
+      clickStartedAt !== undefined &&
+      startEvent !== undefined
+    ) {
+      const movementX = event.screenX - startEvent.screenX
+      const movementY = event.screenY - startEvent.screenY
+      movedDuringClick = Math.sqrt(
+        Math.pow(movementX, 2) + Math.pow(movementY, 2)
+      )
+      clickDuration = performance.now() - clickStartedAt
+    }
+
+    if (
+      event.type === 'click' &&
+      clickDuration !== undefined &&
+      movedDuringClick !== undefined &&
+      lastMoveEventAt !== undefined
+    ) {
+      clickFeaturesEvents.emit('clickFeatures', {
+        g: gender,
+        d: clickDuration,
+        m: movedDuringClick,
+        s: performance.now() - lastMoveEventAt
+      })
+      clickStartedAt = undefined
+      clickDuration = undefined
+    }
+  }
+}
 
 export const handleMouseMove = (gender: Gender) => (event: MouseEvent) => {
   if (!gender) {
     return
   }
+
+  lastMoveEventAt = performance.now()
 
   if (currentCurveLastEvent === undefined) {
     currentCurveLastEvent = performance.now()
@@ -112,5 +162,5 @@ function processCurve(gender: Gender, curve: TrackEvent[]) {
     sdVelocity
   }
 
-  curveFeaturesEvents.emit('features', features)
+  curveFeaturesEvents.emit('curveFeatures', features)
 }

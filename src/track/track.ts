@@ -3,17 +3,29 @@
 import { dba, db } from '../firebase'
 import { CurveFeatures } from './types/curve-features.type'
 import { Gender } from './types/gender.type'
-import { curveFeaturesEvents } from './handle-mouse-move'
+import { curveFeaturesEvents, clickFeaturesEvents } from './handle-mouse-events'
+import { ClickFeatures } from './types/click-features.type'
 
 const dbCurves = dba('curves')
+const dbClicks = dba('clicks')
+const dbSessions = dba('sessions')
 
 export function persistToDb() {
-  curveFeaturesEvents.removeAllListeners('features')
-  curveFeaturesEvents.addListener('features', handleFeatures)
-}
+  curveFeaturesEvents.removeAllListeners('curveFeatures')
+  curveFeaturesEvents.addListener(
+    'curveFeatures',
+    (curveFeatures: CurveFeatures) => {
+      dbCurves.add(curveFeatures)
+    }
+  )
 
-function handleFeatures(features: CurveFeatures) {
-  dbCurves.add(features)
+  clickFeaturesEvents.removeAllListeners('clickFeatures')
+  clickFeaturesEvents.addListener(
+    'clickFeatures',
+    (clickFeatures: ClickFeatures) => {
+      dbClicks.add(clickFeatures)
+    }
+  )
 }
 
 // function getCurveFeatures(label: string): CurveFeatures[] {
